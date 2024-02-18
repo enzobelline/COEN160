@@ -1,0 +1,495 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>src</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-12-02"><meta name="DC.source" content="src.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Problem 1</a></li><li><a href="#3">Problem 2</a></li><li><a href="#4">Problem 3</a></li><li><a href="#5">Problem 4</a></li><li><a href="#6">Problem 5</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>
+clear
+clc
+</pre><h2 id="2">Problem 1</h2><pre class="codeinput">M = []; <span class="comment">% M will be our matrix of x(k) where each column corresponds to a different p value</span>
+kmax = 700;
+init = 0.5;
+probs = 0:0.02:4;
+<span class="keyword">for</span> p = 0:0.02:4
+ res = compute_logistic_map(p, init, kmax); <span class="comment">% compute the column vector</span>
+ M = [M, res]; <span class="comment">% Append resulting column vector to matrix</span>
+<span class="keyword">end</span>
+M_slice = M(end-100:end,:); <span class="comment">% the last 100 or so rows of M</span>
+figure;
+plot(probs,M_slice,<span class="string">'.'</span>);
+title(<span class="string">'Bifurcation Diagram'</span>);
+<span class="comment">% From approximately 0 &lt;= p &lt; 1, the system converges to 0</span>
+<span class="comment">% From approximately 1 &lt;= p &lt; 3, the system has a single amplitude that varies with p</span>
+<span class="comment">% From approximately 3 &lt;= p &lt; 3.57, the system displays period doubling</span>
+<span class="comment">% From approximately 3.57 &lt;= p &lt; 4, the system exhibits chaos</span>
+</pre><img vspace="5" hspace="5" src="src_01.png" alt=""> <h2 id="3">Problem 2</h2><p>a) Plotting four representative sequences with initial condition 0.5 When equilibria converge to 0 (initial condition is 0.5)</p><pre class="codeinput">p = 0.3;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 1: Zero Amplitude'</span>)
+<span class="comment">% Single Amplitude (initial condition is 0.5)</span>
+p = 2;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 2: Single Amplitude'</span>)
+
+<span class="comment">% Period Doubling (initial condition is 0.5)</span>
+p = 3.25;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 3: Period Doubling Starts (Two Amplitudes)'</span>)
+<span class="comment">% Four Amplitudes (initial condition is 0.5)</span>
+p = 3.5;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 4: Four Amplitudes'</span>)
+<span class="comment">% Chaos (initial condition is 0.5)</span>
+p = 3.9;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 5: Chaos'</span>)
+<span class="comment">% p &gt; 4 (initial condition is 0.5) Diverges</span>
+p = 4.3;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+<span class="comment">% Sequence_slice is all negative infinity</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 6: Equilibria diverge'</span>)
+<span class="comment">% b) Now we try with initial condition 1.5</span>
+<span class="comment">% When equilibria converge to 0 (initial condition is 1.5)</span>
+p = 0.3;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 1: Zero Amplitude'</span>)
+<span class="comment">% Single Amplitude (initial condition is 1.5)</span>
+p = 2;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 2: Diverges'</span>)
+<span class="comment">% For initial condition 1.5, anything that does not converge to 0 blows up</span>
+<span class="comment">% to infinity</span>
+<span class="comment">%</span>
+<span class="comment">% Period Doubling (initial condition is 1.5)</span>
+p = 3.25;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 3: Diverges'</span>)
+<span class="comment">% For initial condition 1.5, anything that does not converge to 0 blows up</span>
+<span class="comment">% to infinity</span>
+<span class="comment">% Four Amplitudes (initial condition is 1.5)</span>
+p = 3.5;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 4: Diverges'</span>)
+<span class="comment">% For initial condition 1.5, anything that does not converge to 0 blows up</span>
+<span class="comment">% to infinity</span>
+<span class="comment">% Chaos (initial condition is 1.5)</span>
+p = 3.9;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 5: Chaos (Diverges)'</span>)
+<span class="comment">% For initial condition 1.5, this region diverges</span>
+<span class="comment">% p &gt; 4 (initial condition is 1.5) Diverges</span>
+p = 4.3;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); <span class="comment">% the last 100 or so rows of sequence</span>
+<span class="comment">% Sequence_slice is all negative infinity as before</span>
+figure;
+plot(p,sequence_slice,<span class="string">'o'</span>)
+title(<span class="string">'Region 6 (p = 4.3): Equilibria diverge'</span>)
+</pre><img vspace="5" hspace="5" src="src_02.png" alt=""> <img vspace="5" hspace="5" src="src_03.png" alt=""> <img vspace="5" hspace="5" src="src_04.png" alt=""> <img vspace="5" hspace="5" src="src_05.png" alt=""> <img vspace="5" hspace="5" src="src_06.png" alt=""> <img vspace="5" hspace="5" src="src_07.png" alt=""> <img vspace="5" hspace="5" src="src_08.png" alt=""> <img vspace="5" hspace="5" src="src_09.png" alt=""> <img vspace="5" hspace="5" src="src_10.png" alt=""> <img vspace="5" hspace="5" src="src_11.png" alt=""> <img vspace="5" hspace="5" src="src_12.png" alt=""> <img vspace="5" hspace="5" src="src_13.png" alt=""> <h2 id="4">Problem 3</h2><pre class="codeinput">M = [];
+kmax = 5000;
+init = 0.5;
+probs = 3:0.0001:3.5697;
+<span class="keyword">for</span> p = 3:0.0001:3.5697
+ res = compute_logistic_map(p, init, kmax);
+ M = [M, res];
+<span class="keyword">end</span>
+M_slice = M(end-100:end,:); <span class="comment">% the last 100 or so rows of M</span>
+figure;
+plot(probs,M_slice,<span class="string">'.'</span>);
+title(<span class="string">'Bifurcation Diagram (Greater Resolution): Period Doubling Region'</span>);
+[row_num_M,col_num_M] = size(M_slice);
+Ts = [];
+deltas = [];
+<span class="keyword">for</span> i=1:col_num_M
+ [T,delta] = compute_delta(M_slice(:,i));
+ Ts = [Ts, T];
+<span class="keyword">end</span>
+figure
+plot(probs,Ts)
+title(<span class="string">'T vs p'</span>)
+periods = [2, 4, 8, 16, 32];
+ws = [];
+<span class="keyword">for</span> i=[2,4,8,16,32]
+ indices = find(Ts==i);
+ min_index = min(indices);
+ max_index = max(indices);
+ p_min = probs(min_index);
+ p_max = probs(max_index);
+ w = p_max-p_min;
+ ws = [ws w];
+ fprintf(<span class="string">'T = %.4f \t p_min = %.4f \t p_max = %.4f \t w = %.4f\n'</span>, i, p_min, p_max, w)
+<span class="keyword">end</span>
+F = [];
+<span class="keyword">for</span> i = 1:length(ws)-1
+ ratio = ws(i)/ws(i+1);
+ F = [F ratio];
+<span class="keyword">end</span>
+<span class="comment">% List of ratios: F1, F2, F3, and F4</span>
+disp(F);
+<span class="comment">% All ratios are between 4.6 and 4.8, and converging to about 4.7 or so. We</span>
+<span class="comment">% know that the actual Feigenbaum constant is 4.669 so this checks out.</span>
+</pre><pre class="codeoutput">T = 2.0000 	 p_min = 3.0000 	 p_max = 3.4491 	 w = 0.4491
+T = 4.0000 	 p_min = 3.4492 	 p_max = 3.5439 	 w = 0.0947
+T = 8.0000 	 p_min = 3.5440 	 p_max = 3.5643 	 w = 0.0203
+T = 16.0000 	 p_min = 3.5644 	 p_max = 3.5687 	 w = 0.0043
+T = 32.0000 	 p_min = 3.5688 	 p_max = 3.5697 	 w = 0.0009
+    4.7423    4.6650    4.7209    4.7778
+
+</pre><img vspace="5" hspace="5" src="src_14.png" alt=""> <img vspace="5" hspace="5" src="src_15.png" alt=""> <h2 id="5">Problem 4</h2><pre class="codeinput">kmax = 500;
+init = 0.5;
+<span class="keyword">for</span> p = 3.82839:0.00001:3.82843
+ res = compute_logistic_map(p, init, kmax);
+ figure
+ plot(res)
+ title(sprintf(<span class="string">'X(k) vs k at p=%f'</span>,p))
+<span class="keyword">end</span>
+<span class="comment">% At around 3.82841, we find a brief "disruption"</span>
+</pre><img vspace="5" hspace="5" src="src_16.png" alt=""> <img vspace="5" hspace="5" src="src_17.png" alt=""> <img vspace="5" hspace="5" src="src_18.png" alt=""> <img vspace="5" hspace="5" src="src_19.png" alt=""> <img vspace="5" hspace="5" src="src_20.png" alt=""> <h2 id="6">Problem 5</h2><pre class="codeinput">kmax = 500;
+init1 = 0.5;
+init2 = 0.5 + 10e-8;
+p = 3.95;
+res1 = compute_logistic_map(p, init1, kmax);
+res2 = compute_logistic_map(p, init2, kmax);
+final_res = res2 - res1;
+figure;
+plot(final_res)
+title(<span class="string">'Difference in x(k) vs k for initial conditions differing by 10e-8'</span>)
+<span class="comment">% At around k = 42, the two solutions become visibly distinct</span>
+</pre><img vspace="5" hspace="5" src="src_21.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all
+clear
+clc
+%% Problem 1
+M = []; % M will be our matrix of x(k) where each column corresponds to a different p value
+kmax = 700;
+init = 0.5;
+probs = 0:0.02:4;
+for p = 0:0.02:4
+ res = compute_logistic_map(p, init, kmax); % compute the column vector
+ M = [M, res]; % Append resulting column vector to matrix
+end
+M_slice = M(end-100:end,:); % the last 100 or so rows of M
+figure;
+plot(probs,M_slice,'.');
+title('Bifurcation Diagram');
+% From approximately 0 <= p < 1, the system converges to 0
+% From approximately 1 <= p < 3, the system has a single amplitude that varies with p
+% From approximately 3 <= p < 3.57, the system displays period doubling
+% From approximately 3.57 <= p < 4, the system exhibits chaos
+
+%% Problem 2
+% a) Plotting four representative sequences with initial condition 0.5
+% When equilibria converge to 0 (initial condition is 0.5)
+p = 0.3;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 1: Zero Amplitude')
+% Single Amplitude (initial condition is 0.5)
+p = 2;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 2: Single Amplitude')
+
+% Period Doubling (initial condition is 0.5)
+p = 3.25;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 3: Period Doubling Starts (Two Amplitudes)')
+% Four Amplitudes (initial condition is 0.5)
+p = 3.5;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 4: Four Amplitudes')
+% Chaos (initial condition is 0.5)
+p = 3.9;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 5: Chaos')
+% p > 4 (initial condition is 0.5) Diverges
+p = 4.3;
+kmax = 700;
+init = 0.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+% Sequence_slice is all negative infinity
+figure;
+plot(p,sequence_slice,'o')
+title('Region 6: Equilibria diverge')
+% b) Now we try with initial condition 1.5
+% When equilibria converge to 0 (initial condition is 1.5)
+p = 0.3;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 1: Zero Amplitude')
+% Single Amplitude (initial condition is 1.5)
+p = 2;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 2: Diverges')
+% For initial condition 1.5, anything that does not converge to 0 blows up
+% to infinity
+%
+% Period Doubling (initial condition is 1.5)
+p = 3.25;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 3: Diverges')
+% For initial condition 1.5, anything that does not converge to 0 blows up
+% to infinity
+% Four Amplitudes (initial condition is 1.5)
+p = 3.5;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 4: Diverges')
+% For initial condition 1.5, anything that does not converge to 0 blows up
+% to infinity
+% Chaos (initial condition is 1.5)
+p = 3.9;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+figure;
+plot(p,sequence_slice,'o')
+title('Region 5: Chaos (Diverges)')
+% For initial condition 1.5, this region diverges
+% p > 4 (initial condition is 1.5) Diverges
+p = 4.3;
+kmax = 700;
+init = 1.5;
+sequence = compute_logistic_map(p, init, kmax);
+sequence_slice = sequence(end-100:end,:); % the last 100 or so rows of sequence
+% Sequence_slice is all negative infinity as before
+figure;
+plot(p,sequence_slice,'o')
+title('Region 6 (p = 4.3): Equilibria diverge')
+
+%% Problem 3
+M = [];
+kmax = 5000;
+init = 0.5;
+probs = 3:0.0001:3.5697;
+for p = 3:0.0001:3.5697
+ res = compute_logistic_map(p, init, kmax);
+ M = [M, res];
+end
+M_slice = M(end-100:end,:); % the last 100 or so rows of M
+figure;
+plot(probs,M_slice,'.');
+title('Bifurcation Diagram (Greater Resolution): Period Doubling Region');
+[row_num_M,col_num_M] = size(M_slice);
+Ts = [];
+deltas = [];
+for i=1:col_num_M
+ [T,delta] = compute_delta(M_slice(:,i));
+ Ts = [Ts, T];
+end
+figure
+plot(probs,Ts)
+title('T vs p')
+periods = [2, 4, 8, 16, 32];
+ws = [];
+for i=[2,4,8,16,32]
+ indices = find(Ts==i);
+ min_index = min(indices);
+ max_index = max(indices);
+ p_min = probs(min_index);
+ p_max = probs(max_index);
+ w = p_max-p_min;
+ ws = [ws w];
+ fprintf('T = %.4f \t p_min = %.4f \t p_max = %.4f \t w = %.4f\n', i, p_min, p_max, w)
+end
+F = [];
+for i = 1:length(ws)-1
+ ratio = ws(i)/ws(i+1);
+ F = [F ratio];
+end
+% List of ratios: F1, F2, F3, and F4
+disp(F);
+% All ratios are between 4.6 and 4.8, and converging to about 4.7 or so. We
+% know that the actual Feigenbaum constant is 4.669 so this checks out.
+
+%% Problem 4
+kmax = 500;
+init = 0.5;
+for p = 3.82839:0.00001:3.82843
+ res = compute_logistic_map(p, init, kmax);
+ figure
+ plot(res)
+ title(sprintf('X(k) vs k at p=%f',p))
+end
+% At around 3.82841, we find a brief "disruption"
+
+%% Problem 5
+kmax = 500;
+init1 = 0.5;
+init2 = 0.5 + 10e-8;
+p = 3.95;
+res1 = compute_logistic_map(p, init1, kmax);
+res2 = compute_logistic_map(p, init2, kmax);
+final_res = res2 - res1;
+figure;
+plot(final_res)
+title('Difference in x(k) vs k for initial conditions differing by 10e-8')
+% At around k = 42, the two solutions become visibly distinct
+##### SOURCE END #####
+--></body></html>
